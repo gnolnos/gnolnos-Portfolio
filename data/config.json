@@ -1,0 +1,96 @@
+{
+  "personalInfo": {
+    "brandName": "MY.PORTFOLIO",
+    "fullName": "Nguyễn Văn A",
+    "role": "CREATIVE CONTENT CREATOR",
+    "intro": "Tôi kể chuyện thông qua Giọng nói, Hình ảnh. Đồng thời là một Tech Enthusiast với niềm đam mê bất tận về Home Lab & Smart Home.",
+    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    "contact": {
+      "email": "contact@yourname.com",
+      "phone": "0909 123 456"
+    },
+    "socials": {
+      "facebook": "#",
+      "linkedin": "#",
+      "youtube": "#",
+      "instagram": "#"
+    }
+  },
+  "about": {
+    "strengths": [
+      "Giọng đọc đa dạng, truyền cảm",
+      "Tự tin trước ống kính",
+      "Tư duy dựng phim kể chuyện"
+    ],
+    "hobbies": [
+      "Du lịch trải nghiệm",
+      "Setup Home Lab & SmartHome",
+      "Sưu tầm Microphone"
+    ],
+    "goals": [
+      "Trở thành Top Voice 2025",
+      "Xây dựng kênh YouTube 100k Subs",
+      "Hợp tác với các brand quốc tế"
+    ],
+    "weaknesses": [
+      "Quá cầu toàn, hay sửa đi sửa lại",
+      "Hay quên ăn khi đang edit dở",
+      "Mù đường dù có Google Maps"
+    ]
+  },
+  "portfolioData": {
+    "voiceover": [
+      { 
+        "id": 1, 
+        "title": "Demo Giọng Đọc TVC (File MP3)", 
+        "type": "Commercial", 
+        "duration": "0:45", 
+        "desc": "File âm thanh thuần túy, tone trầm ấm.",
+        "mediaType": "audio",
+        "fileUrl": "https://drive.google.com/uc?export=download&id=ID_FILE_MP3_CUA_BAN" 
+      },
+      { 
+        "id": 2, 
+        "title": "TVC Quảng Cáo Coffee House (Video Thành Phẩm)", 
+        "type": "Finished Product", 
+        "duration": "1:30", 
+        "desc": "Video quảng cáo đã hoàn thiện với giọng đọc của tôi.",
+        "mediaType": "video",
+        "image": "/data/thumbnails/coffee_tvc_thumb.jpg",
+        "fileUrl": "https://drive.google.com/uc?export=download&id=ID_FILE_VIDEO_CUA_BAN" 
+      }
+    ],
+    "presenter": [
+      { 
+        "id": 1, 
+        "title": "Vlog Du Lịch", 
+        "type": "Vlog", 
+        "image": "/data/thumbnails/vlog_thumb.jpg", 
+        "desc": "Dẫn hiện trường.",
+        "fileUrl": "/data/videos/vlog_travel.mp4" 
+      }
+    ],
+    "editor": [
+      {
+         "id": 1,
+         "title": "Showreel 2024",
+         "type": "Showreel",
+         "desc": "Video này được stream trực tiếp từ Google Drive.",
+         "image": "/data/thumbnails/reel_thumb.jpg",
+         "fileUrl": "https://drive.google.com/uc?export=download&id=1A2B3C4D5E6F7G8H9I0J" 
+      }
+    ]
+  },
+  "techPassions": [
+    { "id": "homelab", "iconName": "Server", "title": "Home Lab & Server", "desc": "Vận hành hệ thống Proxmox & TrueNAS. Quản trị ảo hóa, Docker container và lưu trữ dữ liệu tập trung.", "color": "text-blue-400", "bg": "bg-blue-500/10" },
+    { "id": "smarthome", "iconName": "Home", "title": "Smart Home (IoT)", "desc": "Setup hệ sinh thái Home Assistant. Tự động hóa ánh sáng, rèm cửa và kịch bản ngữ cảnh thông minh.", "color": "text-green-400", "bg": "bg-green-500/10" },
+    { "id": "network", "iconName": "Wifi", "title": "Network Admin", "desc": "Quản trị mạng nội bộ (LAN/VLAN), cấu hình Router Mikrotik/Ubiquiti, Firewall và VPN bảo mật.", "color": "text-purple-400", "bg": "bg-purple-500/10" },
+    { "id": "solar", "iconName": "Zap", "title": "Năng Lượng Mặt Trời", "desc": "Đam mê năng lượng tái tạo. Theo dõi hiệu suất pin mặt trời và tối ưu hóa điện năng tiêu thụ.", "color": "text-yellow-400", "bg": "bg-yellow-500/10" },
+    { "id": "studio", "iconName": "Music", "title": "Professional Studio", "desc": "Phòng thu âm chuẩn Acoustic. Trang thiết bị High-end: Microphone Neumann, Soundcard RME, Monitor Genelec.", "color": "text-rose-400", "bg": "bg-rose-500/10" },
+    { "id": "tech", "iconName": "Cpu", "title": "Hi-Tech Enthusiast", "desc": "Luôn cập nhật xu hướng công nghệ mới nhất. Review và trải nghiệm các thiết bị kỹ thuật số.", "color": "text-cyan-400", "bg": "bg-cyan-500/10" }
+  ],
+  "skills": [
+    "Adobe Premiere", "Audition", "Davinci Resolve", "After Effects",
+    "Proxmox VE", "Home Assistant", "TrueNAS Scale", "Docker"
+  ]
+}
