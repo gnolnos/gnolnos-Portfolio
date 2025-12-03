@@ -15,6 +15,7 @@
       "linkedin": "#",
       "youtube": "#",
       "instagram": "#",
+      "zalo": "https://zalo.me/0987654321",
       "jellyfin": {
         "apiKey": "YOUR_JELLYFIN_API_KEY" 
       }

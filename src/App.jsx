@@ -3,6 +3,21 @@ import {
   Mic, Video, Scissors, Play, Mail, Phone, Facebook, Linkedin, Youtube, Instagram, ChevronRight, Star, Target, Heart, AlertCircle, Menu, X, Sparkles, Wand2, Bot, Loader, Server, Cpu, Zap, Wifi, Home, Music 
 } from 'lucide-react';
 //import { useForm, ValidationError } from '@formspree/react';
+// --- Custom Icons ---
+// Zalo Icon Component (SVG thuần để đồng bộ style)
+const ZaloIcon = ({ size = 24, className = "" }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 48 48" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path d="M9.7828 32.5714L4.06573 35.636C3.50499 35.9387 3.01802 35.1966 3.29805 34.6192L5.80802 29.429C3.47353 26.5451 2.27832 22.9564 2.27832 19.3481C2.27832 10.3644 11.1961 3.06445 22.2158 3.06445C33.2355 3.06445 42.1533 10.3644 42.1533 19.3481C42.1533 28.3318 33.2355 35.6318 22.2158 35.6318C18.6655 35.6318 15.2891 34.5269 12.4492 32.5855" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15.5 15H29L15.5 25H29" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 const iconMap = {
   Server: <Server size={32} />,
@@ -512,7 +527,14 @@ const App = () => {
               <div className="space-y-6">
                 <div className="flex items-center gap-4"><div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-rose-500"><Mail size={20} /></div><div><p className="text-sm text-slate-400">Email</p><p className="font-medium">{data.personalInfo.contact.email}</p></div></div>
                 <div className="flex items-center gap-4"><div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-rose-500"><Phone size={20} /></div><div><p className="text-sm text-slate-400">Hotline / Zalo</p><p className="font-medium">{data.personalInfo.contact.phone}</p></div></div>
-                <div className="pt-6"><p className="text-sm text-slate-400 mb-4">Mạng Xã Hội</p><div className="flex gap-4"><a href={data.personalInfo.socials.facebook} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Facebook size={18} /></a><a href={data.personalInfo.socials.linkedin} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Linkedin size={18} /></a><a href={data.personalInfo.socials.youtube} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Youtube size={18} /></a><a href={data.personalInfo.socials.instagram} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Instagram size={18} /></a></div></div>
+                <div className="pt-6"><p className="text-sm text-slate-400 mb-4">Mạng Xã Hội</p><div className="flex gap-4"><a href={data.personalInfo.socials.facebook} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Facebook size={18} /></a><a href={data.personalInfo.socials.linkedin} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Linkedin size={18} /></a><a href={data.personalInfo.socials.youtube} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Youtube size={18} /></a><a href={data.personalInfo.socials.instagram} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Instagram size={18} /></a>
+                  {/* Zalo Link */}
+                  {data.personalInfo.socials.zalo && (
+                      <a href={data.personalInfo.socials.zalo} target="_blank" rel="noopener noreferrer" className="flex items-center text-slate-300 hover:text-blue-400 transition-colors">
+                          <ZaloIcon className="mr-3" size={20} /> Zalo Chat
+                      </a>
+                  )}
+                  </div></div>
               </div>
               <form id="contact-form" action={`https://formspree.io/f/${data.personalInfo.contact.formspreeId}`} method="POST" className="space-y-4">
                 <div><input type="text" id="name" name="name" required placeholder="Tên của bạn" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors text-white" /></div>
