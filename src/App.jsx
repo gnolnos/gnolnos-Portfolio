@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Mic, Video, Scissors, Play, Mail, Phone, Facebook, Linkedin, Youtube, Instagram, ChevronRight, Star, Target, Heart, AlertCircle, Menu, X, Sparkles, Wand2, Bot, Loader, Server, Cpu, Zap, Wifi, Home, Music 
 } from 'lucide-react';
+import { useForm, ValidationError } from '@formspree/react';
 
 const iconMap = {
   Server: <Server size={32} />,
@@ -12,12 +13,19 @@ const iconMap = {
   Music: <Music size={32} />
 };
 // Helper function để lấy Google Drive ID
-const getGoogleDriveId = (url) => {
+const getGoogleDriveId = (src) => {
   const regExp = /(?:id=|\/d\/)([\w-]+)/;
-  const match = url.match(regExp);
+  const match = src.match(regExp);
   return match ? match[1] : null;
 };
 
+// 1. Xử lý Link YouTube
+const getYouTubeEmbedUrl = (src) => {
+    //if (!link) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = src.match(regExp);
+    return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+};
 // Helper function để render trình phát Media
 const MediaPlayer = ({ type, src, poster }) => {
   if (!src) return <div className="text-slate-500 text-xs">Chưa có file media</div>;
@@ -25,7 +33,69 @@ const MediaPlayer = ({ type, src, poster }) => {
   // Kiểm tra xem có phải link Google Drive không
   const isGoogleDrive = src.includes('drive.google.com');
   const driveId = isGoogleDrive ? getGoogleDriveId(src) : null;
+  const isYouTube = src.includes('youtube');
+  const youtubeEmbed = isYouTube ? getYouTubeEmbedUrl(src) : null;
+  // 2. Kiểm tra Video trực tiếp (Nextcloud, Jellyfin, MP4 file)
+  const isDirectVideo = (src) => {
+      //if (!link) return false;
+      
+      // Kiểm tra các dấu hiệu của Direct Link:
+      // - Đuôi file video (.mp4, .webm)
+      // - Link Nextcloud (/download)
+      // - Link Jellyfin (/stream)
+      return src.match(/\.(mp4|webm|ogg|mov)$/i) || 
+            src.includes('/download') || 
+            src.includes('/stream');
+  };
+  const isDirect = isDirectVideo(src);
+  // 3. Xử lý Link Jellyfin (Tự động thêm API Key)
+  const processVideoUrl = (src) => {
+      //if (!src) return "";
+      
+      // Nếu là link Jellyfin (chứa /stream) và chưa có api_key
+      if (src.includes('/stream') && !src.includes('api_key') && data.personalInfo.socials.jellyfin?.apiKey) {
+          // Kiểm tra xem URL đã có tham số query nào chưa để dùng ? hoặc &
+          const separator = src.includes('?') ? '&' : '?';
+          return `${src}${separator}api_key=${data.personalInfo.socials.jellyfin.apiKey}`;
+      }
+      
+      return src;
+  };
+  const processedUrl = processVideoUrl(src);
 
+  if (youtubeEmbed) {
+      return (
+          <div className="w-full aspect-video bg-black relative group-hover:shadow-lg transition-all">
+              <iframe 
+                  className="w-full h-full object-cover"
+                  src={youtubeEmbed} 
+                  title="MediaPlayer"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+              ></iframe>
+          </div>
+      );
+  }
+
+  if (isDirect) {
+      return (
+          <div className="w-full aspect-video bg-black relative group-hover:shadow-lg transition-all flex items-center justify-center bg-slate-800">
+              {/* Thẻ Video HTML5 hỗ trợ play trực tiếp link Jellyfin/Nextcloud 
+                  playsInline: Hỗ trợ play trên mobile không bị full screen
+              */}
+              <video 
+                  className="w-full h-full object-cover"
+                  controls
+                  playsInline 
+                  preload="metadata"
+              >
+                  <source src={processedUrl} type="video/mp4" />
+                  <source src={processedUrl} type="video/webm" />
+                  Trình duyệt của bạn không hỗ trợ thẻ video.
+              </video>
+          </div>
+      );
+  }
   // Xử lý riêng cho Google Drive (Dùng Iframe Embed để đảm bảo play được)
   if (isGoogleDrive && driveId) {
     return (
@@ -69,83 +139,8 @@ const MediaPlayer = ({ type, src, poster }) => {
   }
   return null;
 };
-    // --- XỬ LÝ FORM LIÊN HỆ ---
-const form = document.getElementById('contact-form');
 
-if (form) {
-    // 1. Cấu hình Dynamic Action URL
-    // Kiểm tra xem file config có được load không
-    if (window.AppConfig && window.AppConfig.FORMSPREE_ID) {
-        form.action = `https://formspree.io/f/${window.AppConfig.FORMSPREE_ID}`;
-    } else {
-        console.error("Lỗi: Không tìm thấy FORMSPREE_ID trong src/js/config.js");
-        const btn = document.getElementById('submit-btn');
-        if(btn) {
-            btn.disabled = true;
-            btn.innerText = "Lỗi cấu hình (Thiếu ID)";
-            btn.classList.add("bg-red-500");
-        }
-        return;
-    }
 
-    form.addEventListener('submit', async function(event) {
-        event.preventDefault();
-
-        const status = document.getElementById('form-status');
-        const btn = document.getElementById('submit-btn');
-        const originalBtnContent = btn.innerHTML;
-        
-        const data = new FormData(event.target);
-
-        // Hiệu ứng Loading
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi...';
-        status.classList.add('hidden');
-        status.className = "text-sm font-medium hidden text-center";
-
-        try {
-            // Gửi request
-            const response = await fetch(form.action, { // Sử dụng form.action đã được set ở trên
-                method: form.method,
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            });
-
-            if (response.ok) {
-                status.innerHTML = '<i class="fa-solid fa-check-circle"></i> Cảm ơn! Tin nhắn của bạn đã được gửi.';
-                status.classList.remove('hidden');
-                status.classList.add('text-green-600');
-                
-                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Đã gửi';
-                form.reset();
-                
-                setTimeout(() => {
-                    btn.disabled = false;
-                    btn.innerHTML = originalBtnContent;
-                    btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-                    btn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                    status.classList.add('hidden');
-                }, 4000);
-            } else {
-                const errorData = await response.json();
-                if (Object.hasOwn(errorData, 'errors')) {
-                    status.innerText = errorData["errors"].map(error => error["message"]).join(", ");
-                } else {
-                    status.innerText = "Có lỗi xảy ra khi gửi form.";
-                }
-                throw new Error('Server returned error');
-            }
-        } catch (error) {
-            status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Không thể gửi tin nhắn. Vui lòng thử lại sau.';
-            status.classList.remove('hidden');
-            status.classList.add('text-red-600');
-            btn.disabled = false;
-            btn.innerHTML = originalBtnContent;
-        }
-    });
-};
 
 // Cấu hình mặc định (Fallback) để chạy trong Preview hoặc khi chưa có file config.json
 const DEFAULT_CONFIG = {
@@ -276,7 +271,7 @@ const App = () => {
     
     // Lưu ý: Trong môi trường Vite thực tế, bạn sẽ dùng: import.meta.env.VITE_GEMINI_API_KEY
     // Tại đây ta để chuỗi rỗng để tránh lỗi cú pháp trong môi trường preview cũ
-    const apiKey = ""; 
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY; 
     
     const prompt = `Bạn là một Đạo diễn Âm thanh (Voice Director). Phân tích đoạn: "${aiInput}". Trả về: 1. Kịch Bản Đề Xuất, 2. Chỉ Đạo Diễn Xuất, 3. Lý do.`;
 
@@ -519,7 +514,7 @@ const App = () => {
                 <div className="flex items-center gap-4"><div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-rose-500"><Phone size={20} /></div><div><p className="text-sm text-slate-400">Hotline / Zalo</p><p className="font-medium">{data.personalInfo.contact.phone}</p></div></div>
                 <div className="pt-6"><p className="text-sm text-slate-400 mb-4">Mạng Xã Hội</p><div className="flex gap-4"><a href={data.personalInfo.socials.facebook} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Facebook size={18} /></a><a href={data.personalInfo.socials.linkedin} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Linkedin size={18} /></a><a href={data.personalInfo.socials.youtube} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Youtube size={18} /></a><a href={data.personalInfo.socials.instagram} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Instagram size={18} /></a></div></div>
               </div>
-              <form id="contact-form" action="" method="POST" className="space-y-4">
+              <form id="contact-form" action={`https://formspree.io/f/${data.personalInfo.contact.formspreeId}`} method="POST" className="space-y-4">
                 <div><input type="text" id="name" name="name" required placeholder="Tên của bạn" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors text-white" /></div>
                 <div><input type="email" id="email" name="email" required placeholder="Email liên hệ" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors text-white" /></div>
                 <div><textarea id="message" name="message" rows="4" required placeholder="Nội dung công việc..." className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors text-white"></textarea></div>
@@ -530,7 +525,7 @@ const App = () => {
         </div>
       </section>
 
-      <footer className="py-8 bg-slate-900 border-t border-slate-800 text-center text-slate-500 text-sm"><p>© 2024 {data.personalInfo.brandName}. All rights reserved.</p></footer>
+      <footer className="py-8 bg-slate-900 border-t border-slate-800 text-center text-slate-500 text-sm"><p>© 2025 {data.personalInfo.brandName}. All rights reserved.</p></footer>
 
       <style>{`@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }`}</style>
     </div>

@@ -7,13 +7,17 @@
     "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
     "contact": {
       "email": "contact@yourname.com",
-      "phone": "0909 123 456"
+      "phone": "0909 123 456",
+      "formspreeId": "abcd123e"
     },
     "socials": {
       "facebook": "#",
       "linkedin": "#",
       "youtube": "#",
-      "instagram": "#"
+      "instagram": "#",
+      "jellyfin": {
+        "apiKey": "YOUR_JELLYFIN_API_KEY" 
+      }
     }
   },
   "about": {
