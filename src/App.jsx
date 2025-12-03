@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Mic, Video, Scissors, Play, Mail, Phone, Facebook, Linkedin, Youtube, Instagram, ChevronRight, Star, Target, Heart, AlertCircle, Menu, X, Sparkles, Wand2, Bot, Loader, Server, Cpu, Zap, Wifi, Home, Music 
 } from 'lucide-react';
-import { useForm, ValidationError } from '@formspree/react';
+//import { useForm, ValidationError } from '@formspree/react';
 
 const iconMap = {
   Server: <Server size={32} />,
