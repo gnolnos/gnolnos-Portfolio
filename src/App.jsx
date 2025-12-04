@@ -527,14 +527,15 @@ const App = () => {
               <div className="space-y-6">
                 <div className="flex items-center gap-4"><div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-rose-500"><Mail size={20} /></div><div><p className="text-sm text-slate-400">Email</p><p className="font-medium">{data.personalInfo.contact.email}</p></div></div>
                 <div className="flex items-center gap-4"><div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center text-rose-500"><Phone size={20} /></div><div><p className="text-sm text-slate-400">Hotline / Zalo</p><p className="font-medium">{data.personalInfo.contact.phone}</p></div></div>
-                <div className="pt-6"><p className="text-sm text-slate-400 mb-4">Mạng Xã Hội</p><div className="flex gap-4"><a href={data.personalInfo.socials.facebook} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Facebook size={18} /></a><a href={data.personalInfo.socials.linkedin} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Linkedin size={18} /></a><a href={data.personalInfo.socials.youtube} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Youtube size={18} /></a><a href={data.personalInfo.socials.instagram} className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Instagram size={18} /></a>
-                  {/* Zalo Link */}
-                  {data.personalInfo.socials.zalo && (
-                      <a href={data.personalInfo.socials.zalo} target="_blank" rel="noopener noreferrer" className="flex items-center text-slate-300 hover:text-blue-400 transition-colors">
-                          <ZaloIcon className="mr-3" size={20} /> Zalo Chat
-                      </a>
-                  )}
-                  </div></div>
+                <div className="pt-6"><p className="text-sm text-slate-400 mb-4">Mạng Xã Hội</p>
+                <div className="flex gap-4">
+                  <a href={data.personalInfo.socials.facebook} target="_blank" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Facebook size={18} /></a>
+                  <a href={data.personalInfo.socials.linkedin} target="_blank" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Linkedin size={18} /></a>
+                  <a href={data.personalInfo.socials.youtube} target="_blank" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Youtube size={18} /></a>
+                  <a href={data.personalInfo.socials.instagram} target="_blank" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><Instagram size={18} /></a>
+                  <a href={data.personalInfo.socials.zalo} target="_blank" className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all"><ZaloIcon className="mr-3" size={20} /></a>
+                </div>
+                </div>
               </div>
               <form id="contact-form" action={`https://formspree.io/f/${data.personalInfo.contact.formspreeId}`} method="POST" className="space-y-4">
                 <div><input type="text" id="name" name="name" required placeholder="Tên của bạn" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-rose-500 transition-colors text-white" /></div>
