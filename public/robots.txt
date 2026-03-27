@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gnolnos.github.io/gnolnos-Portfolio/sitemap.xml

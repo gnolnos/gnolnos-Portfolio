@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Mic, Video, Scissors, Play, Mail, Phone, Facebook, Linkedin, Youtube, Instagram, ChevronRight, Star, Target, Heart, AlertCircle, Menu, X, Sparkles, Wand2, Bot, Loader, Server, Cpu, Zap, Wifi, Home, Music 
 } from 'lucide-react';
-//import { useForm, ValidationError } from '@formspree/react';
+
 // --- Custom Icons ---
 // Zalo Icon Component (SVG thuần để đồng bộ style)
 const ZaloIcon = ({ size = 24, className = "" }) => (
@@ -42,7 +42,7 @@ const getYouTubeEmbedUrl = (src) => {
     return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
 };
 // Helper function để render trình phát Media
-const MediaPlayer = ({ type, src, poster }) => {
+const MediaPlayer = ({ type, src, poster, jellyfinApiKey }) => {
   if (!src) return <div className="text-slate-500 text-xs">Chưa có file media</div>;
 
   // Kiểm tra xem có phải link Google Drive không
@@ -68,10 +68,9 @@ const MediaPlayer = ({ type, src, poster }) => {
       //if (!src) return "";
       
       // Nếu là link Jellyfin (chứa /stream) và chưa có api_key
-      if (src.includes('/stream') && !src.includes('api_key') && data.personalInfo.socials.jellyfin?.apiKey) {
-          // Kiểm tra xem URL đã có tham số query nào chưa để dùng ? hoặc &
+      if (src.includes('/stream') && !src.includes('api_key') && jellyfinApiKey) {
           const separator = src.includes('?') ? '&' : '?';
-          return `${src}${separator}api_key=${data.personalInfo.socials.jellyfin.apiKey}`;
+          return `${src}${separator}api_key=${jellyfinApiKey}`;
       }
       
       return src;
@@ -87,7 +86,7 @@ const MediaPlayer = ({ type, src, poster }) => {
                   title="MediaPlayer"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                   allowFullScreen
-              ></iframe>
+               loading="lazy"></iframe>
           </div>
       );
   }
@@ -103,7 +102,7 @@ const MediaPlayer = ({ type, src, poster }) => {
                   controls
                   playsInline 
                   preload="metadata"
-              >
+               loading="lazy">
                   <source src={processedUrl} type="video/mp4" />
                   <source src={processedUrl} type="video/webm" />
                   Trình duyệt của bạn không hỗ trợ thẻ video.
@@ -120,7 +119,7 @@ const MediaPlayer = ({ type, src, poster }) => {
           className="w-full h-full"
           allow="autoplay"
           title="Media Player"
-        ></iframe>
+         loading="lazy"></iframe>
       </div>
     );
   }
@@ -145,7 +144,7 @@ const MediaPlayer = ({ type, src, poster }) => {
           className="w-full h-full object-contain"
           poster={poster} 
           preload="metadata"
-        >
+         loading="lazy">
           <source src={src} type="video/mp4" />
           Trình duyệt không hỗ trợ video.
         </video>
@@ -380,7 +379,7 @@ const App = () => {
               <div className="absolute inset-4 border border-rose-500/30 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
               <div className="absolute inset-0 rounded-full overflow-hidden border-4 border-slate-800 shadow-2xl">
                 {/* ẢNH ĐẠI DIỆN LINH ĐỘNG - Load từ data.personalInfo.avatarUrl */}
-                <img src={data.personalInfo.avatarUrl} alt="Portrait" className="w-full h-full object-cover"/>
+                <img src={data.personalInfo.avatarUrl} alt={`Portrait of ${data.personalInfo.fullName}`} className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
@@ -446,7 +445,9 @@ const App = () => {
                       type={item.mediaType || 'audio'} // Mặc định là audio nếu không ghi gì
                       src={item.fileUrl} 
                       poster={item.image} // Dùng cho video thumbnail
+                      jellyfinApiKey={data.personalInfo.socials.jellyfin?.apiKey}
                     />
+                      jellyfinApiKey={data.personalInfo.socials.jellyfin?.apiKey}
                   </div>
                 ))}
               </div>
@@ -464,7 +465,7 @@ const App = () => {
 
                     {/* PLAYER THẬT */}
                     {/* fileUrl là đường dẫn video (/data/video.mp4), image là thumbnail */}
-                    <MediaPlayer type="video" src={item.fileUrl} poster={item.image} />
+                    <MediaPlayer type="video" src={item.fileUrl} poster={item.image} jellyfinApiKey={data.personalInfo.socials.jellyfin?.apiKey} />
                   </div>
                 ))}
               </div>
