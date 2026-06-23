@@ -163,7 +163,7 @@ const DEFAULT_CONFIG = {
     "fullName": "Nguyễn Văn A",
     "role": "CREATIVE CONTENT CREATOR",
     "intro": "Tôi kể chuyện thông qua Giọng nói, Hình ảnh. Đồng thời là một Tech Enthusiast với niềm đam mê bất tận về Home Lab & Smart Home.",
-    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+    "avatarUrl": "https://cdn-icons-png.flaticon.com/512/3675/3675805.png",
     "contact": {
       "email": "contact@yourname.com",
       "phone": "0909 123 456"
